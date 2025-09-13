@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Drop-out Prediction System - Smart India Hackathon 2025</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen hidden">
+        <div class="loading-spinner"></div>
+        <p>Processing data...</p>
+    </div>
+
+    <!-- Login Page -->
+    <div id="login-page" class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <h1><i class="fas fa-graduation-cap"></i> EduPredict AI</h1>
+                <p>Smart India Hackathon 2025</p>
+                <h2>Drop-out Prediction & Counseling System</h2>
+            </div>
+            <form id="login-form" class="login-form">
+                <div class="form-group">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" class="form-control" id="email" placeholder="admin@edupredict.com" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password" placeholder="Enter password" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Role</label>
+                    <select class="form-control" id="role" required>
+                        <option value="">Select Role</option>
+                        <option value="Admin">Admin</option>
+                        <option value="Mentor">Mentor</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn--primary btn--full-width">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+            </form>
+            <div class="demo-credentials">
+                <p><strong>Demo Credentials:</strong></p>
+                <p>Admin: admin@edupredict.com / admin123</p>
+                <p>Mentor: mentor@edupredict.com / mentor123</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div id="main-app" class="main-app hidden">
+        <!-- Navigation Header -->
+        <header class="app-header">
+            <div class="header-content">
+                <div class="header-left">
+                    <h1><i class="fas fa-graduation-cap"></i> EduPredict AI</h1>
+                    <span class="role-badge" id="user-role-badge"></span>
+                </div>
+                <div class="header-right">
+                    <span id="user-name">Welcome, User</span>
+                    <button class="btn btn--outline btn--sm" id="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard Overview -->
+            <div id="dashboard-view" class="dashboard-view">
+                <div class="dashboard-stats">
+                    <div class="stat-card stat-card--total">
+                        <i class="fas fa-users"></i>
+                        <div class="stat-content">
+                            <h3 id="total-students">0</h3>
+                            <p>Total Students</p>
+                        </div>
+                    </div>
+                    <div class="stat-card stat-card--high-risk">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <div class="stat-content">
+                            <h3 id="high-risk-students">0</h3>
+                            <p>High Risk Students</p>
+                        </div>
+                    </div>
+                    <div class="stat-card stat-card--medium-risk">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <div class="stat-content">
+                            <h3 id="medium-risk-students">0</h3>
+                            <p>Medium Risk Students</p>
+                        </div>
+                    </div>
+                    <div class="stat-card stat-card--low-risk">
+                        <i class="fas fa-check-circle"></i>
+                        <div class="stat-content">
+                            <h3 id="low-risk-students">0</h3>
+                            <p>Low Risk Students</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <button class="btn btn--primary" id="upload-data-btn">
+                        <i class="fas fa-upload"></i> Upload Student Data
+                    </button>
+                    <button class="btn btn--secondary" id="configure-thresholds-btn">
+                        <i class="fas fa-cog"></i> Configure Risk Thresholds
+                    </button>
+                    <button class="btn btn--secondary" id="send-notifications-btn">
+                        <i class="fas fa-bell"></i> Send Notifications
+                    </button>
+                </div>
+
+                <!-- Filters and Search -->
+                <div class="filters-section">
+                    <div class="filter-group">
+                        <input type="text" class="form-control" id="search-students" placeholder="Search students...">
+                        <select class="form-control" id="filter-risk">
+                            <option value="">All Risk Levels</option>
+                            <option value="red">High Risk</option>
+                            <option value="yellow">Medium Risk</option>
+                            <option value="green">Low Risk</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Students Table -->
+                <div class="students-table-container">
+                    <table class="students-table">
+                        <thead>
+                            <tr>
+                                <th>Student ID</th>
+                                <th>Name</th>
+                                <th>Attendance</th>
+                                <th>Performance</th>
+                                <th>Fees Status</th>
+                                <th>Risk Level</th>
+                                <th>Risk Score</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="students-table-body">
+                            <!-- Students will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Student Detail View -->
+            <div id="student-detail-view" class="student-detail-view hidden">
+                <div class="detail-header">
+                    <button class="btn btn--outline" id="back-to-dashboard">
+                        <i class="fas fa-arrow-left"></i> Back to Dashboard
+                    </button>
+                    <h2 id="student-detail-name">Student Details</h2>
+                </div>
+                <div class="student-detail-content">
+                    <div class="detail-cards">
+                        <div class="detail-card">
+                            <h3>Basic Information</h3>
+                            <div id="student-basic-info"></div>
+                        </div>
+                        <div class="detail-card">
+                            <h3>Attendance Analysis</h3>
+                            <div id="student-attendance-info"></div>
+                        </div>
+                        <div class="detail-card">
+                            <h3>Academic Performance</h3>
+                            <div id="student-performance-info"></div>
+                        </div>
+                        <div class="detail-card">
+                            <h3>Fee Status</h3>
+                            <div id="student-fee-info"></div>
+                        </div>
+                        <div class="detail-card">
+                            <h3>Risk Assessment</h3>
+                            <div id="student-risk-info"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Upload Data Modal -->
+            <div id="upload-modal" class="modal hidden">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Upload Student Data</h3>
+                        <button class="modal-close" id="close-upload-modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="upload-section">
+                            <div class="upload-group">
+                                <label class="form-label">Attendance Data (CSV)</label>
+                                <input type="file" class="form-control" id="attendance-file" accept=".csv">
+                                <small>Format: student_id, student_name, total_classes, classes_attended</small>
+                            </div>
+                            <div class="upload-group">
+                                <label class="form-label">Marks Data (CSV)</label>
+                                <input type="file" class="form-control" id="marks-file" accept=".csv">
+                                <small>Format: student_id, student_name, subject, marks_obtained, max_marks</small>
+                            </div>
+                            <div class="upload-group">
+                                <label class="form-label">Fee Data (CSV)</label>
+                                <input type="file" class="form-control" id="fees-file" accept=".csv">
+                                <small>Format: student_id, student_name, total_fees, fees_paid</small>
+                            </div>
+                        </div>
+                        <div class="upload-actions">
+                            <button class="btn btn--primary" id="process-upload">
+                                <i class="fas fa-cogs"></i> Process Data
+                            </button>
+                            <button class="btn btn--secondary" id="use-sample-data">
+                                <i class="fas fa-database"></i> Use Sample Data
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Configure Thresholds Modal -->
+            <div id="thresholds-modal" class="modal hidden">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Configure Risk Thresholds</h3>
+                        <button class="modal-close" id="close-thresholds-modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="threshold-group">
+                            <label class="form-label">Minimum Attendance Percentage</label>
+                            <input type="number" class="form-control" id="attendance-threshold" value="75" min="0" max="100">
+                            <small>Students below this attendance % are flagged as high risk</small>
+                        </div>
+                        <div class="threshold-group">
+                            <label class="form-label">Failed Subjects Threshold</label>
+                            <input type="number" class="form-control" id="failed-subjects-threshold" value="2" min="0" max="10">
+                            <small>Students failing this many subjects are flagged as high risk</small>
+                        </div>
+                        <div class="threshold-group">
+                            <label class="form-label">Minimum Fee Payment Percentage</label>
+                            <input type="number" class="form-control" id="fee-threshold" value="80" min="0" max="100">
+                            <small>Students below this fee payment % are flagged as risk</small>
+                        </div>
+                        <div class="threshold-actions">
+                            <button class="btn btn--primary" id="save-thresholds">
+                                <i class="fas fa-save"></i> Save Thresholds
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notifications Modal -->
+            <div id="notifications-modal" class="modal hidden">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Send Risk Notifications</h3>
+                        <button class="modal-close" id="close-notifications-modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="notification-options">
+                            <div class="notification-group">
+                                <label>
+                                    <input type="checkbox" id="notify-high-risk" checked>
+                                    Send notifications for High Risk students
+                                </label>
+                            </div>
+                            <div class="notification-group">
+                                <label>
+                                    <input type="checkbox" id="notify-medium-risk">
+                                    Send notifications for Medium Risk students
+                                </label>
+                            </div>
+                        </div>
+                        <div class="notification-preview" id="notification-preview">
+                            <!-- Notification preview will be populated here -->
+                        </div>
+                        <div class="notification-actions">
+                            <button class="btn btn--primary" id="send-notifications">
+                                <i class="fas fa-paper-plane"></i> Send Notifications
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Success/Error Messages -->
+    <div id="message-container" class="message-container hidden">
+        <div class="message" id="message">
+            <span id="message-text"></span>
+            <button class="message-close" id="close-message">&times;</button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
