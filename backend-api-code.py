@@ -650,6 +650,13 @@ def expired_token_callback(jwt_header, jwt_payload):
 def invalid_token_callback(error):
     return jsonify({'error': 'Invalid token'}), 401
 
+@app.route('/api/version', methods=['GET'])
+def version():
+    return jsonify({
+        "application": "EduPredict Backend API",
+        "version": "1.0.0",
+        "hackathon": "Smart India Hackathon 2025"
+    })
 
 @app.route('/api/health', methods=['GET'])
 def health_check():
