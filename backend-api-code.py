@@ -650,6 +650,16 @@ def expired_token_callback(jwt_header, jwt_payload):
 def invalid_token_callback(error):
     return jsonify({'error': 'Invalid token'}), 401
 
+
+@app.route('/api/health', methods=['GET'])
+def health_check():
+    """Health check endpoint"""
+    return jsonify({
+        "status": "success",
+        "message": "EduPredict Backend API is running",
+        "timestamp": datetime.utcnow().isoformat()
+    }), 200
+
 # Initialize sample data
 def init_sample_data():
     """Initialize database with sample student data"""
